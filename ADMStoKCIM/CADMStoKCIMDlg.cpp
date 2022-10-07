@@ -999,7 +999,7 @@ void CADMStoKCIMDlg::ADMStoKCIM_Read()
 		if (nTYPE != 0)
 		{
 			szADMS_Code.Format(_T("SELECT A.EQC_MRFK, A.SUBS_MRFK, A.BASEVOLTAGE_FK, A.HV_LIMIT, B.NAME FROM voltagelevel A, identifiedobject B WHERE A.EQC_MRFK = B.MRID AND A.SUBS_MRFK IN (  select distinct subs_mrfk from voltagelevel where eqc_mrfk in ( select distinct primary_voltagelevel_fk from powertransformer where ceq_mrfk in ( select distinct mtr_mrfk   from dl where member_office_fk = %d)));"), nTYPE);
-		}
+			}
 		else
 		{
 			szADMS_Code.Format(_T("SELECT A.EQC_MRFK, A.SUBS_MRFK, A.BASEVOLTAGE_FK, A.HV_LIMIT, B.NAME FROM voltagelevel A, identifiedobject B WHERE A.EQC_MRFK = B.MRID"));
@@ -1042,7 +1042,10 @@ void CADMStoKCIMDlg::ADMStoKCIM_Read()
 
 		if (nTYPE != 0)
 		{
-			szADMS_Code.Format(_T("SELECT A.CONNECTIVITYNODE_ID, A.CEQ_MRFK, B.NAME, B.NAME_TYPE_FK FROM (SELECT A.CONNECTIVITYNODE_ID, B.CEQ_MRFK FROM connectivitynode A INNER JOIN TERMINAL B ON A.CONNECTIVITYNODE_ID = B.CONNECTIVITYNODE_FK  GROUP BY A.CONNECTIVITYNODE_ID) A, identifiedobject B WHERE A.CEQ_MRFK = B.MRID AND B.MRID IN (select MRID from conductingequipment where CHANGE_EQC_MRFK in (select EQC_MRFK from dl where member_office_fk = %d)OR MRID IN (select CEQ_MRFK from dl where member_office_fk = %d))AND B.NAME_TYPE_FK != 15;"), nTYPE, nTYPE);
+			//20221007 수정한 버전입니다.
+			//szADMS_Code.Format(_T("SELECT A.CONNECTIVITYNODE_ID, A.CEQ_MRFK, B.NAME, B.NAME_TYPE_FK FROM (SELECT A.CONNECTIVITYNODE_ID, B.CEQ_MRFK FROM connectivitynode A INNER JOIN TERMINAL B ON A.CONNECTIVITYNODE_ID = B.CONNECTIVITYNODE_FK  ) A, identifiedobject B WHERE A.CEQ_MRFK = B.MRID AND B.MRID IN (select MRID from conductingequipment where CHANGE_EQC_MRFK in (select EQC_MRFK from dl where member_office_fk = %d)OR MRID IN (select CEQ_MRFK from dl where member_office_fk = %d))AND B.NAME_TYPE_FK != 15 GROUP BY A.CONNECTIVITYNODE_ID;"), nTYPE, nTYPE);
+
+			szADMS_Code.Format(_T("SELECT A.CONNECTIVITYNODE_ID, A.CEQ_MRFK, B.NAME, B.NAME_TYPE_FK FROM (SELECT A.CONNECTIVITYNODE_ID, B.CEQ_MRFK FROM connectivitynode A INNER JOIN TERMINAL B ON A.CONNECTIVITYNODE_ID = B.CONNECTIVITYNODE_FK GROUP BY A.CONNECTIVITYNODE_ID;) A, identifiedobject B WHERE A.CEQ_MRFK = B.MRID AND B.MRID IN (select MRID from conductingequipment where CHANGE_EQC_MRFK in (select EQC_MRFK from dl where member_office_fk = %d)OR MRID IN (select CEQ_MRFK from dl where member_office_fk = %d))AND B.NAME_TYPE_FK != 15 "), nTYPE, nTYPE);
 		}
 		else
 		{
@@ -1063,7 +1066,15 @@ void CADMStoKCIMDlg::ADMStoKCIM_Read()
 			if (nn1 > -1)
 			{
 				stNAME.Replace(_T(","), _T("_"));
+			}	
+			int nCheck = 99;
+			CString SZZZZZ;
+			SZZZZZ.Format(_T("10975200000848"));
+			if (SZZZZZ == strCNID)
+			{
+				nCheck = 0;
 			}
+
 			pNode = new CNode();
 			pNode->m_nKind = 0;
 			pNode->m_strMRID.Format(_T("%s"), strCNID);
@@ -1109,6 +1120,13 @@ void CADMStoKCIMDlg::ADMStoKCIM_Read()
 			if (nn1 > -1)
 			{
 				stNAME.Replace(_T(","), _T("_"));
+			}
+			int nCheck = 99;
+			CString SZZZZZ;
+			SZZZZZ.Format(_T("10972900003668"));
+			if (SZZZZZ == strMRID)
+			{
+				nCheck = 0;
 			}
 			if (m_map_IDNode.Lookup(strCNID, nCount_i))
 			{

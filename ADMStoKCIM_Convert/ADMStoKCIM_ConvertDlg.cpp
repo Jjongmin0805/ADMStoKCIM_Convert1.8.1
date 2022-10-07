@@ -181,7 +181,7 @@ void CADMStoKCIMConvertDlg::OnBnClickedButton2()
 	ADMStoKCIMDLG.ADMStoKCIM_CSV_Route(_T("\\Input_ADMS\\"));
 	ADMStoKCIMDLG.m_szADMS_Code.Format(_T("adms_code")); //
 	//
-	ADMStoKCIMDLG.ST_CODE(4810); //사업소 선택 4520 ? 4530 // 4670영동
+	ADMStoKCIMDLG.ST_CODE(4687); //사업소 선택 4520 ? 4530 // 4670영동
 	ADMStoKCIMDLG.ST_MODE(1); //DUAL = 0 // DUAL/ST = 1;
 	ADMStoKCIMDLG.DoModal();
 }
