@@ -1043,9 +1043,8 @@ void CADMStoKCIMDlg::ADMStoKCIM_Read()
 		if (nTYPE != 0)
 		{
 			//20221007 수정한 버전입니다.
-			//szADMS_Code.Format(_T("SELECT A.CONNECTIVITYNODE_ID, A.CEQ_MRFK, B.NAME, B.NAME_TYPE_FK FROM (SELECT A.CONNECTIVITYNODE_ID, B.CEQ_MRFK FROM connectivitynode A INNER JOIN TERMINAL B ON A.CONNECTIVITYNODE_ID = B.CONNECTIVITYNODE_FK  ) A, identifiedobject B WHERE A.CEQ_MRFK = B.MRID AND B.MRID IN (select MRID from conductingequipment where CHANGE_EQC_MRFK in (select EQC_MRFK from dl where member_office_fk = %d)OR MRID IN (select CEQ_MRFK from dl where member_office_fk = %d))AND B.NAME_TYPE_FK != 15 GROUP BY A.CONNECTIVITYNODE_ID;"), nTYPE, nTYPE);
-
-			szADMS_Code.Format(_T("SELECT A.CONNECTIVITYNODE_ID, A.CEQ_MRFK, B.NAME, B.NAME_TYPE_FK FROM (SELECT A.CONNECTIVITYNODE_ID, B.CEQ_MRFK FROM connectivitynode A INNER JOIN TERMINAL B ON A.CONNECTIVITYNODE_ID = B.CONNECTIVITYNODE_FK GROUP BY A.CONNECTIVITYNODE_ID;) A, identifiedobject B WHERE A.CEQ_MRFK = B.MRID AND B.MRID IN (select MRID from conductingequipment where CHANGE_EQC_MRFK in (select EQC_MRFK from dl where member_office_fk = %d)OR MRID IN (select CEQ_MRFK from dl where member_office_fk = %d))AND B.NAME_TYPE_FK != 15 "), nTYPE, nTYPE);
+			szADMS_Code.Format(_T("SELECT A.CONNECTIVITYNODE_ID, A.CEQ_MRFK, B.NAME, B.NAME_TYPE_FK FROM (SELECT A.CONNECTIVITYNODE_ID, B.CEQ_MRFK FROM connectivitynode A INNER JOIN TERMINAL B ON A.CONNECTIVITYNODE_ID = B.CONNECTIVITYNODE_FK  ) A, identifiedobject B WHERE A.CEQ_MRFK = B.MRID AND B.MRID IN (select MRID from conductingequipment where CHANGE_EQC_MRFK in (select EQC_MRFK from dl where member_office_fk = %d)OR MRID IN (select CEQ_MRFK from dl where member_office_fk = %d))AND B.NAME_TYPE_FK != 15 GROUP BY A.CONNECTIVITYNODE_ID;"), nTYPE, nTYPE);
+			//szADMS_Code.Format(_T("SELECT A.CONNECTIVITYNODE_ID, A.CEQ_MRFK, B.NAME, B.NAME_TYPE_FK FROM (SELECT A.CONNECTIVITYNODE_ID, B.CEQ_MRFK FROM connectivitynode A INNER JOIN TERMINAL B ON A.CONNECTIVITYNODE_ID = B.CONNECTIVITYNODE_FK GROUP BY A.CONNECTIVITYNODE_ID;) A, identifiedobject B WHERE A.CEQ_MRFK = B.MRID AND B.MRID IN (select MRID from conductingequipment where CHANGE_EQC_MRFK in (select EQC_MRFK from dl where member_office_fk = %d)OR MRID IN (select CEQ_MRFK from dl where member_office_fk = %d))AND B.NAME_TYPE_FK != 15 "), nTYPE, nTYPE);
 		}
 		else
 		{
@@ -1195,12 +1194,6 @@ void CADMStoKCIMDlg::ADMStoKCIM_Read()
 			rs.GetFieldValue((short)6, strData);
 
 			int nCheck = 0;
-			CString SZZZZZ;
-			SZZZZZ.Format(_T("10963700011540"));
-			if (SZZZZZ == strMRID)
-			{
-				nCheck = 0;
-			}
 			if (strCNID.IsEmpty())
 			{
 				m_map_NEW_GEN_NDisnull.SetAt(strMRID, 9999);
@@ -1288,17 +1281,6 @@ void CADMStoKCIMDlg::ADMStoKCIM_Read()
 			rs.GetFieldValue((short)8, strData);
 			nNAME_TYPE_FK = _wtoi(strData);
 
-			CString SZZZZZ;
-			SZZZZZ.Format(_T("10963600003176"));
-			if (SZZZZZ == szGENUNIT_CEQ)
-			{
-				nCheck = 0;
-			}
-			SZZZZZ.Format(_T("10963700011540"));
-			if (szGENUNIT_II_EQU_ID == SZZZZZ)
-			{
-				nCheck = 0;
-			}
 			nCheck = 0;
 			m_map_NEW_GEN_NDisnull.Lookup(szGENUNIT_II_EQU_ID, nCheck);
 			if (nCheck == 9999)
@@ -2621,15 +2603,15 @@ void CADMStoKCIMDlg::ADMStoKCIM_Convert()
 						 pBranch->m_nCeq_Type == 33  || pBranch->m_nCeq_Type == 34  || pBranch->m_nCeq_Type == 35  || pBranch->m_nCeq_Type == 36  || pBranch->m_nCeq_Type == 37  ||
 						 pBranch->m_nCeq_Type == 38  || pBranch->m_nCeq_Type == 39  || pBranch->m_nCeq_Type == 48  || pBranch->m_nCeq_Type == 49  || pBranch->m_nCeq_Type == 50  ||
 						 pBranch->m_nCeq_Type == 51  || pBranch->m_nCeq_Type == 52  || pBranch->m_nCeq_Type == 72  || pBranch->m_nCeq_Type == 320 || pBranch->m_nCeq_Type == 321 ||
-					     pBranch->m_nCeq_Type == 322 || pBranch->m_nCeq_Type == 323 || pBranch->m_nCeq_Type == 324 || pBranch->m_nCeq_Type == 325 || pBranch->m_nCeq_Type == 326 ||
-					     pBranch->m_nCeq_Type == 329 || pBranch->m_nCeq_Type == 330 )
+					     pBranch->m_nCeq_Type == 322 || pBranch->m_nCeq_Type == 323 || pBranch->m_nCeq_Type == 324 || pBranch->m_nCeq_Type == 325 || pBranch->m_nCeq_Type == 326 
+					     )
 				{ // 3.자동 || pBranch->m_nCeq_Type == 73 || pBranch->m_nCeq_Type == 79
 					nType = 3;
 				}
 				else if (pBranch->m_nCeq_Type == 3 || pBranch->m_nCeq_Type == 5 || pBranch->m_nCeq_Type == 6 || pBranch->m_nCeq_Type == 8 || pBranch->m_nCeq_Type == 13 ||
 						 pBranch->m_nCeq_Type == 23 || pBranch->m_nCeq_Type == 27 || pBranch->m_nCeq_Type == 30 || pBranch->m_nCeq_Type == 32 || pBranch->m_nCeq_Type == 40 ||
 						 pBranch->m_nCeq_Type == 41 || pBranch->m_nCeq_Type == 42 || pBranch->m_nCeq_Type == 43 || pBranch->m_nCeq_Type == 44 || pBranch->m_nCeq_Type == 55 ||
-						 pBranch->m_nCeq_Type == 56 || pBranch->m_nCeq_Type == 121 || pBranch->m_nCeq_Type == 206)
+						 pBranch->m_nCeq_Type == 56 || pBranch->m_nCeq_Type == 121 || pBranch->m_nCeq_Type == 206 || pBranch->m_nCeq_Type == 311)
 				{ // 4.수동
 					nType = 4;
 				}
@@ -2646,8 +2628,8 @@ void CADMStoKCIMDlg::ADMStoKCIM_Convert()
 				else if (pBranch->m_nCeq_Type == 18 || pBranch->m_nCeq_Type == 314 || pBranch->m_nCeq_Type == 327) { // 7. 저압
 					nType = 7;
 				}
-				else if (pBranch->m_nCeq_Type == 17 || pBranch->m_nCeq_Type == 22 || pBranch->m_nCeq_Type == 45 || pBranch->m_nCeq_Type == 46 || pBranch->m_nCeq_Type == 47 || 
-					     pBranch->m_nCeq_Type == 313)  { // 8. 고압
+				else if (pBranch->m_nCeq_Type == 17  || pBranch->m_nCeq_Type == 22  || pBranch->m_nCeq_Type == 45  || pBranch->m_nCeq_Type == 46 || pBranch->m_nCeq_Type == 47 || 
+					     pBranch->m_nCeq_Type == 313 || pBranch->m_nCeq_Type == 328 || pBranch->m_nCeq_Type == 329 || pBranch->m_nCeq_Type == 330)  { // 8. 고압
 					nType = 8;
 				}
 				else if (pBranch->m_nCeq_Type == 53 || pBranch->m_nCeq_Type == 54 || pBranch->m_nCeq_Type == 57 || pBranch->m_nCeq_Type == 82 || pBranch->m_nCeq_Type == 83 ||
@@ -2657,9 +2639,6 @@ void CADMStoKCIMDlg::ADMStoKCIM_Convert()
 				}
 				else if (pBranch->m_nCeq_Type == 79 || pBranch->m_nCeq_Type == 80) { // 7. 저압
 					nType = 10;
-				}
-				else if (pBranch->m_nCeq_Type == 328) { //20220718	
-					nType = 12;
 				}
 				else if (pBranch->m_nCeq_Type == 75 ) 
 				{
@@ -2696,22 +2675,22 @@ void CADMStoKCIMDlg::ADMStoKCIM_Convert()
 				}
 				else if (pBranch->m_nCeq_Type == 304 || pBranch->m_nCeq_Type == 305 )///// 20220718
 				{
-					if (pBranch->m_nMULTICIR_NUMBER == 1 || pBranch->m_nMULTICIR_NUMBER == 2  )
+					if (pBranch->m_nMULTICIR_NUMBER == 1 || pBranch->m_nMULTICIR_NUMBER == 4 )
 					{
 						nType = 3;
 					}
-					if (pBranch->m_nMULTICIR_NUMBER == 3 || pBranch->m_nMULTICIR_NUMBER == 4)
+					if (pBranch->m_nMULTICIR_NUMBER == 2 || pBranch->m_nMULTICIR_NUMBER == 3)
 					{
 						nType = 5;
 					}
 				}
 				else if (pBranch->m_nCeq_Type == 317 || pBranch->m_nCeq_Type == 318 || pBranch->m_nCeq_Type == 319 )///// 20220718
 				{
-					if (pBranch->m_nMULTICIR_NUMBER == 1 || pBranch->m_nMULTICIR_NUMBER == 2)
+					if (pBranch->m_nMULTICIR_NUMBER == 1 || pBranch->m_nMULTICIR_NUMBER == 3)
 					{
 						nType = 3;
 					}
-					if (pBranch->m_nMULTICIR_NUMBER == 3 )
+					if (pBranch->m_nMULTICIR_NUMBER == 2 )
 					{
 						nType = 5;
 					}
@@ -2821,13 +2800,11 @@ void CADMStoKCIMDlg::ADMStoKCIM_Convert()
 						m_map_CBSW_ND.SetAt(pBranch->m_szMULTISW, stCbsw.cbsw_ii_fnd);
 					}
 
-					if ( pBranch->m_nCeq_Type == 58  || pBranch->m_nCeq_Type == 59 || pBranch->m_nCeq_Type == 60 || pBranch->m_nCeq_Type == 61 || pBranch->m_nCeq_Type == 62 ||
-						 pBranch->m_nCeq_Type == 63  || pBranch->m_nCeq_Type == 64 || pBranch->m_nCeq_Type == 65 || pBranch->m_nCeq_Type == 66 || pBranch->m_nCeq_Type == 67 ||
-						 pBranch->m_nCeq_Type == 110 ||
-						 pBranch->m_nCeq_Type == 68  || pBranch->m_nCeq_Type == 70 || pBranch->m_nCeq_Type == 74 || pBranch->m_nCeq_Type == 76 || pBranch->m_nCeq_Type == 77 ||
-						 pBranch->m_nCeq_Type == 78  ||
- 						 pBranch->m_nCeq_Type == 69  ||										
-						 pBranch->m_nCeq_Type == 302 || pBranch->m_nCeq_Type == 75 ) 
+					if ( pBranch->m_nCeq_Type == 58  || pBranch->m_nCeq_Type == 59  || pBranch->m_nCeq_Type == 60 || pBranch->m_nCeq_Type == 61  || pBranch->m_nCeq_Type == 62 ||
+						 pBranch->m_nCeq_Type == 63  || pBranch->m_nCeq_Type == 64  || pBranch->m_nCeq_Type == 65 || pBranch->m_nCeq_Type == 66  || pBranch->m_nCeq_Type == 67 ||						
+						 pBranch->m_nCeq_Type == 68  || pBranch->m_nCeq_Type == 69  || pBranch->m_nCeq_Type == 70 || pBranch->m_nCeq_Type == 74  || pBranch->m_nCeq_Type == 75 || 
+						 pBranch->m_nCeq_Type == 76  || pBranch->m_nCeq_Type == 77  || pBranch->m_nCeq_Type == 78 || pBranch->m_nCeq_Type == 110 || pBranch->m_nCeq_Type == 301||
+						 pBranch->m_nCeq_Type == 302 || pBranch->m_nCeq_Type == 303 || pBranch->m_nCeq_Type == 305)
 					{
 						stCbsw.cbsw_ii_prde = m_arrPRDE_STA.GetSize() + 1;
 
@@ -3006,6 +2983,47 @@ void CADMStoKCIMDlg::ADMStoKCIM_Convert()
 								stPRDE.PRDE_MX_LD_C_PHA = 0;
 							}
 						}
+						else if (pBranch->m_nCeq_Type == 301)
+						{
+						if (pBranch->m_nMULTICIR_NUMBER == 2 || pBranch->m_nMULTICIR_NUMBER == 3 || pBranch->m_nMULTICIR_NUMBER == 4)
+						{
+							stPRDE.PRDE_OCRF_II_TCCSET = 0;
+							stPRDE.PRDE_OCRD_II_TCCSET = GET_PRDE_TCCSET(GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 496));
+							stPRDE.PRDE_OCR_Pickup_C = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 12);
+							stPRDE.PRDE_OCR_IIC = 0;
+							stPRDE.PRDE_OCGRF_II_TCCSET = 0;
+							stPRDE.PRDE_OCGRD_II_TCCSET = GET_PRDE_TCCSET(GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 500));
+							stPRDE.PRDE_OCGR_Pickup_C = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 13);
+							stPRDE.PRDE_OCGR_IIC = 0;
+							stPRDE.PRDE_TYPE = 1;
+							stPRDE.PRDE_SET_GTYPE = 1;
+							stPRDE.PRDE_OCR_NOF = 0;
+							stPRDE.PRDE_OCR_NOD = 0;
+							stPRDE.PRDE_OCGR_NOF = 0;
+							stPRDE.PRDE_OCGR_NOD = 0;
+							stPRDE.PRDE_OCRF_TMS = 0;
+							stPRDE.PRDE_OCRF_TAS = 0;
+							stPRDE.PRDE_OCRF_MRT = 0;
+							dPRDE_OCRD_TMS = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 497);
+							dPRDE_OCRD_TAS = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 498);
+							dPRDE_OCRD_MRT = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 499);
+							stPRDE.PRDE_OCRD_TMS = dPRDE_OCRD_TMS;
+							stPRDE.PRDE_OCRD_TAS = dPRDE_OCRD_TAS;
+							stPRDE.PRDE_OCRD_MRT = dPRDE_OCRD_MRT;
+							stPRDE.PRDE_OCGRF_TMS = 0;
+							stPRDE.PRDE_OCGRF_TAS = 0;
+							stPRDE.PRDE_OCGRF_MRT = 0;
+							dPRDE_OCGRD_TMS = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 501));
+							dPRDE_OCGRD_TAS = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 502));
+							dPRDE_OCGRD_MRT = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 503));
+							stPRDE.PRDE_OCGRD_TMS = dPRDE_OCGRD_TMS;
+							stPRDE.PRDE_OCGRD_TAS = dPRDE_OCGRD_TAS;
+							stPRDE.PRDE_OCGRD_MRT = dPRDE_OCGRD_MRT;
+							stPRDE.PRDE_OCR_CTR = 120;
+							stPRDE.PRDE_OCGR_CTR = 120;
+							stPRDE.PRDE_MX_LD_C_PHA = 0;
+						}
+						}
 						else if (pBranch->m_nCeq_Type == 302 )
 						{
 							if (pBranch->m_nMULTICIR_NUMBER == 2 || pBranch->m_nMULTICIR_NUMBER == 3 || pBranch->m_nMULTICIR_NUMBER == 4)
@@ -3047,88 +3065,6 @@ void CADMStoKCIMDlg::ADMStoKCIM_Convert()
 								stPRDE.PRDE_MX_LD_C_PHA = 0;
 							}
 						}
-						else if ( pBranch->m_nCeq_Type == 305)
-						{
-							if (pBranch->m_nMULTICIR_NUMBER == 2 || pBranch->m_nMULTICIR_NUMBER == 3 )
-							{
-								stPRDE.PRDE_OCRF_II_TCCSET = 0;
-								stPRDE.PRDE_OCRD_II_TCCSET = GET_PRDE_TCCSET(GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 414));
-								stPRDE.PRDE_OCR_Pickup_C = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 12);
-								stPRDE.PRDE_OCR_IIC = 0;
-								stPRDE.PRDE_OCGRF_II_TCCSET = 0;
-								stPRDE.PRDE_OCGRD_II_TCCSET = GET_PRDE_TCCSET(GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 301));
-								stPRDE.PRDE_OCGR_Pickup_C = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 13);
-								stPRDE.PRDE_OCGR_IIC = 0;
-								stPRDE.PRDE_TYPE = 1;
-								stPRDE.PRDE_SET_GTYPE = 1;
-								stPRDE.PRDE_OCR_NOF = 0;
-								stPRDE.PRDE_OCR_NOD = 0;
-								stPRDE.PRDE_OCGR_NOF = 0;
-								stPRDE.PRDE_OCGR_NOD = 0;
-								stPRDE.PRDE_OCRF_TMS = 0;
-								stPRDE.PRDE_OCRF_TAS = 0;
-								stPRDE.PRDE_OCRF_MRT = 0;
-								dPRDE_OCRD_TMS = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 418);
-								dPRDE_OCRD_TAS = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 299);
-								dPRDE_OCRD_MRT = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 419);
-								stPRDE.PRDE_OCRD_TMS = dPRDE_OCRD_TMS;
-								stPRDE.PRDE_OCRD_TAS = dPRDE_OCRD_TAS;
-								stPRDE.PRDE_OCRD_MRT = dPRDE_OCRD_MRT;
-								stPRDE.PRDE_OCGRF_TMS = 0;
-								stPRDE.PRDE_OCGRF_TAS = 0;
-								stPRDE.PRDE_OCGRF_MRT = 0;
-								dPRDE_OCGRD_TMS = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 421));
-								dPRDE_OCGRD_TAS = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 303));
-								dPRDE_OCGRD_MRT = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 392));
-								stPRDE.PRDE_OCGRD_TMS = dPRDE_OCGRD_TMS;
-								stPRDE.PRDE_OCGRD_TAS = dPRDE_OCGRD_TAS;
-								stPRDE.PRDE_OCGRD_MRT = dPRDE_OCGRD_MRT;
-								stPRDE.PRDE_OCR_CTR = 120;
-								stPRDE.PRDE_OCGR_CTR = 120;
-								stPRDE.PRDE_MX_LD_C_PHA = 0;
-							}
-						}
-						else if (pBranch->m_nCeq_Type == 301  )
-						{
-							if (pBranch->m_nMULTICIR_NUMBER == 2 || pBranch->m_nMULTICIR_NUMBER == 3 || pBranch->m_nMULTICIR_NUMBER == 4)							
-							{
-								stPRDE.PRDE_OCRF_II_TCCSET = 0;
-								stPRDE.PRDE_OCRD_II_TCCSET = GET_PRDE_TCCSET(GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 496));
-								stPRDE.PRDE_OCR_Pickup_C = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 12);
-								stPRDE.PRDE_OCR_IIC = 0;
-								stPRDE.PRDE_OCGRF_II_TCCSET = 0;
-								stPRDE.PRDE_OCGRD_II_TCCSET = GET_PRDE_TCCSET(GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 500));
-								stPRDE.PRDE_OCGR_Pickup_C = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 13);
-								stPRDE.PRDE_OCGR_IIC = 0;
-								stPRDE.PRDE_TYPE = 1;
-								stPRDE.PRDE_SET_GTYPE = 1;
-								stPRDE.PRDE_OCR_NOF = 0;
-								stPRDE.PRDE_OCR_NOD = 0;
-								stPRDE.PRDE_OCGR_NOF = 0;
-								stPRDE.PRDE_OCGR_NOD = 0;
-								stPRDE.PRDE_OCRF_TMS = 0;
-								stPRDE.PRDE_OCRF_TAS = 0;
-								stPRDE.PRDE_OCRF_MRT = 0;
-								dPRDE_OCRD_TMS = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 497);
-								dPRDE_OCRD_TAS = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 498);
-								dPRDE_OCRD_MRT = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 499);
-								stPRDE.PRDE_OCRD_TMS = dPRDE_OCRD_TMS;
-								stPRDE.PRDE_OCRD_TAS = dPRDE_OCRD_TAS;
-								stPRDE.PRDE_OCRD_MRT = dPRDE_OCRD_MRT;
-								stPRDE.PRDE_OCGRF_TMS = 0;
-								stPRDE.PRDE_OCGRF_TAS = 0;
-								stPRDE.PRDE_OCGRF_MRT = 0;
-								dPRDE_OCGRD_TMS = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 501));
-								dPRDE_OCGRD_TAS = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 502));
-								dPRDE_OCGRD_MRT = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 503));
-								stPRDE.PRDE_OCGRD_TMS = dPRDE_OCGRD_TMS;
-								stPRDE.PRDE_OCGRD_TAS = dPRDE_OCGRD_TAS;
-								stPRDE.PRDE_OCGRD_MRT = dPRDE_OCGRD_MRT;
-								stPRDE.PRDE_OCR_CTR = 120;
-								stPRDE.PRDE_OCGR_CTR = 120;
-								stPRDE.PRDE_MX_LD_C_PHA = 0;
-							}
-						}
 						else if (pBranch->m_nCeq_Type == 303)
 						{
 							if (pBranch->m_nMULTICIR_NUMBER == 2 || pBranch->m_nMULTICIR_NUMBER == 3)
@@ -3162,6 +3098,47 @@ void CADMStoKCIMDlg::ADMStoKCIM_Convert()
 								stPRDE.PRDE_OCR_CTR = 0;
 								stPRDE.PRDE_OCGR_CTR = 0;
 								stPRDE.PRDE_MX_LD_C_PHA = 0;
+								stPRDE.PRDE_OCR_CTR = 120;
+								stPRDE.PRDE_OCGR_CTR = 120;
+								stPRDE.PRDE_MX_LD_C_PHA = 0;
+							}
+						}
+						else if (pBranch->m_nCeq_Type == 305)
+						{
+							if (pBranch->m_nMULTICIR_NUMBER == 2 || pBranch->m_nMULTICIR_NUMBER == 3)
+							{
+								stPRDE.PRDE_OCRF_II_TCCSET = 0;
+								stPRDE.PRDE_OCRD_II_TCCSET = GET_PRDE_TCCSET(GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 414));
+								stPRDE.PRDE_OCR_Pickup_C = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 12);
+								stPRDE.PRDE_OCR_IIC = 0;
+								stPRDE.PRDE_OCGRF_II_TCCSET = 0;
+								stPRDE.PRDE_OCGRD_II_TCCSET = GET_PRDE_TCCSET(GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 301));
+								stPRDE.PRDE_OCGR_Pickup_C = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 13);
+								stPRDE.PRDE_OCGR_IIC = 0;
+								stPRDE.PRDE_TYPE = 1;
+								stPRDE.PRDE_SET_GTYPE = 1;
+								stPRDE.PRDE_OCR_NOF = 0;
+								stPRDE.PRDE_OCR_NOD = 0;
+								stPRDE.PRDE_OCGR_NOF = 0;
+								stPRDE.PRDE_OCGR_NOD = 0;
+								stPRDE.PRDE_OCRF_TMS = 0;
+								stPRDE.PRDE_OCRF_TAS = 0;
+								stPRDE.PRDE_OCRF_MRT = 0;
+								dPRDE_OCRD_TMS = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 418);
+								dPRDE_OCRD_TAS = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 299);
+								dPRDE_OCRD_MRT = GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 419);
+								stPRDE.PRDE_OCRD_TMS = dPRDE_OCRD_TMS;
+								stPRDE.PRDE_OCRD_TAS = dPRDE_OCRD_TAS;
+								stPRDE.PRDE_OCRD_MRT = dPRDE_OCRD_MRT;
+								stPRDE.PRDE_OCGRF_TMS = 0;
+								stPRDE.PRDE_OCGRF_TAS = 0;
+								stPRDE.PRDE_OCGRF_MRT = 0;
+								dPRDE_OCGRD_TMS = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 421));
+								dPRDE_OCGRD_TAS = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 303));
+								dPRDE_OCGRD_MRT = (GET_PRDE_AO_VALUE(pBranch->m_strMRID, pBranch->m_nCeq_Type, 392));
+								stPRDE.PRDE_OCGRD_TMS = dPRDE_OCGRD_TMS;
+								stPRDE.PRDE_OCGRD_TAS = dPRDE_OCGRD_TAS;
+								stPRDE.PRDE_OCGRD_MRT = dPRDE_OCGRD_MRT;
 								stPRDE.PRDE_OCR_CTR = 120;
 								stPRDE.PRDE_OCGR_CTR = 120;
 								stPRDE.PRDE_MX_LD_C_PHA = 0;
@@ -3623,7 +3600,7 @@ void CADMStoKCIMDlg::ADMStoKCIM_Convert()
 		stGEN.gen_r = 0;
 		stGEN.gen_stx = 0;
 		stGEN.gen_ssx = 0;
-		stGEN.gen_type = 1; //20190722
+		stGEN.gen_type = 11; //20221011
 		stGEN.gen_vol_cls = 0;
 		stGEN.gen_conndrep = 1;
 		stGEN.gen_contype = 7;//3상
